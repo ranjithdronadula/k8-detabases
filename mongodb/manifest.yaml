@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: ranjithops/mangodb:v1
+        image: ranjithops/mongodb:v1
         volumeMounts:
         - name: mongodb-data
           mountPath: /data/db
