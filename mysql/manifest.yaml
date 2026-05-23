@@ -1,3 +1,19 @@
+### Secteres using to store passwords
+apiVersion: v1
+kind: Secret     # we use secretes for storing my_sql password
+metadata:
+  name: mysql
+  namespace: roboshop
+  labels:
+    component: mysql
+    project: roboshop
+    tier: database
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: "Um9ib1Nob3BAMQ=="
+
+## Headles service
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,21 +33,9 @@ spec:
   - protocol: TCP
     port: 3306 # service port
     targetPort: 3306 # container port
----    
-apiVersion: v1
-kind: Secret     # we use secretes for storing my_sql password
-metadata:
-  name: mysql
-  namespace: roboshop
-  labels:
-    component: mysql
-    project: roboshop
-    tier: database
-type: Opaque
-data:
-  MYSQL_ROOT_PASSWORD: "Um9ib1Nob3BAMQ=="
----
 
+## Normal service    
+---    
 apiVersion: v1
 kind: Service
 metadata:
@@ -50,6 +54,8 @@ spec:
   - protocol: TCP
     port: 3306 # service port
     targetPort: 3306 # container port
+
+## StatefulSet    
 ---    
 apiVersion: apps/v1
 kind: StatefulSet
@@ -78,7 +84,7 @@ spec:
       containers:
       - name: mysql
         image: ranjithops/mysql:v1
-        envFrom:
+        envFrom:                      # we use envFrom by refere secrets
         - secretRef:
             name: mysql
         volumeMounts:
